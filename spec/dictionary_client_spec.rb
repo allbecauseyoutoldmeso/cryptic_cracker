@@ -8,7 +8,7 @@ RSpec.describe DictionaryClient do
     let(:definition_two) { 'a despicable person' }
 
     let(:senses) do
-      [ { 'definitions' => [definition_one] },  {'definitions' => [definition_two] } ]
+      [{ 'definitions' => [definition_one] },  {'definitions' => [definition_two] }]
     end
 
     let(:entries) do

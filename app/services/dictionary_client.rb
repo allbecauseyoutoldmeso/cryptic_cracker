@@ -31,11 +31,11 @@ class DictionaryClient
   end
 
   def url
-    base_url + word + '?' + params
+    base_url + word + '?' + filters.to_param
   end
 
-  def params
-    { fields: 'definitions' }.to_param
+  def filters
+    { fields: 'definitions' }
   end
 
   def headers

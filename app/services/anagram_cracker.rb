@@ -21,6 +21,6 @@ class AnagramCracker
   end
 
   def permutations
-    letters.permutation.to_a
+    letters.permutation.to_a.uniq
   end
 end
