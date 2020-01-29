@@ -1,7 +1,6 @@
 require 'rest_client'
 
 class ThesaurusClient
-
   attr_reader :word
 
   def initialize(word)

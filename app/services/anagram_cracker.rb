@@ -1,5 +1,6 @@
-class AnagramCracker
+require 'prime'
 
+class AnagramCracker
   attr_reader :letters
 
   def initialize(letters)
@@ -7,20 +8,20 @@ class AnagramCracker
   end
 
   def words
-    potential_words.select { |word| has_definition?(word) }
+    Word.where(product: product).map(&:written_form)
   end
 
   private
 
-  def has_definition?(word)
-    DictionaryClient.new(word).definitions.any?
+  def product
+    primes.inject(:*)
   end
 
-  def potential_words
-    permutations.map(&:join)
+  def primes
+    letters.map { |letter| prime_map[letter] }
   end
 
-  def permutations
-    letters.permutation.to_a.uniq
+  def prime_map
+    ('a'..'z').to_a.zip(Prime.take(26)).to_h
   end
 end

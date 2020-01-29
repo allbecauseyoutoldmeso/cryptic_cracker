@@ -18,6 +18,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'pry', '~> 0.12.2'
   gem 'figaro', '~> 1.1'
+  gem 'factory_bot', '~> 5.1'
 end
 
 group :development do
