@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_27_204215) do
+ActiveRecord::Schema.define(version: 2020_01_31_170352) do
 
   create_table "words", force: :cascade do |t|
     t.string "written_form"
     t.string "product"
+    t.index ["product"], name: "index_words_on_product"
   end
 
 end
