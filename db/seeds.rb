@@ -29,7 +29,7 @@ end
 
 rows.each do |row|
   begin
-    word = row[0]
+    word = row[0].downcase
     product = product(word)
     Word.create(written_form: word, product: product.to_s)
   rescue => error

@@ -8,7 +8,7 @@ RSpec.describe AnagramCracker do
     let!(:rat) { create(:word, written_form: 'rat', product: 8662) }
     let!(:art) { create(:word, written_form: 'art', product: 8662) }
     let!(:tar) { create(:word, written_form: 'tar', product: 8662) }
-    let!(:rate) { create(:word, written_form: 'tar', product: 95282) }
+    let!(:rate) { create(:word, written_form: 'rate', product: 95282) }
 
     let(:anagram_cracker) { AnagramCracker.new(letters) }
 

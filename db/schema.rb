@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_01_31_170352) do
 
-  create_table "words", force: :cascade do |t|
+  create_table "words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "written_form"
     t.string "product"
     t.index ["product"], name: "index_words_on_product"
