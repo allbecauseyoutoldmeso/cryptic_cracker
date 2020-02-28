@@ -13,6 +13,6 @@ class PatternMatcher
   private
 
   def regex
-    "^#{pattern.gsub(/[^abc]/, '.')}$"
+    "^#{pattern.gsub(/[^a-z]/, '.')}$"
   end
 end
