@@ -1,9 +1,9 @@
 class PatternMatcher
 
-  attr_reader :characters
+  attr_reader :pattern
 
   def initialize(pattern)
-    @characters = pattern.split('')
+    @pattern = pattern
   end
 
   def words
@@ -13,21 +13,6 @@ class PatternMatcher
   private
 
   def regex
-    string = ''
-    count = 0
-
-    characters.each_with_index do |character, index|
-      if character.match(/[a-z]/)
-        string += ('.{' + count.to_s + '}[' + character + ']')
-        count = 0
-      else
-        count += 1
-        if index === (characters.count - 1)
-          string += ('.{' + count.to_s + '}')
-        end
-      end
-    end
-
-    '\A' + string + '\z'
+    "^#{pattern.gsub(/[^abc]/, '.')}$"
   end
 end
