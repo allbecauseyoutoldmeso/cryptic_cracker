@@ -1,27 +1,17 @@
-require 'prime'
-
 class AnagramCracker
-  attr_reader :letters
+  attr_reader :characters
 
-  def initialize(letters)
-    @letters = letters
+  def initialize(characters)
+    @characters = characters
   end
 
-  def words
+  def anagrams
     Word.where(product: product).map(&:written_form)
   end
 
   private
 
   def product
-    primes.inject(:*)
-  end
-
-  def primes
-    letters.map { |letter| prime_map[letter] }
-  end
-
-  def prime_map
-    ('a'..'z').to_a.zip(Prime.take(26)).to_h
+    ProductCalculator.new(characters).product
   end
 end

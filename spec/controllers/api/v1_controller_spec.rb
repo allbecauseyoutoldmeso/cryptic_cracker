@@ -72,12 +72,12 @@ RSpec.describe Api::V1Controller, type: :request do
   end
 
   describe 'anagrams' do
-    let(:letters) { 'tinsel'}
+    let(:characters) { 'tinsel'}
     let!(:anagram_one) { create(:word, written_form: 'silent') }
     let!(:anagram_two) { create(:word, written_form: 'listen') }
 
     let(:params) do
-      { letters: letters}
+      { characters: characters}
     end
 
     it 'returns anagrams' do

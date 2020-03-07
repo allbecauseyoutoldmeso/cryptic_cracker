@@ -6,7 +6,7 @@ class PatternMatcher
     @pattern = pattern
   end
 
-  def words
+  def matches
     Word.where('written_form REGEXP ?', regex).map(&:written_form)
   end
 

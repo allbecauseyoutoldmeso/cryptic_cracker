@@ -9,10 +9,10 @@ RSpec.describe PatternMatcher do
     let!(:bananas) { create(:word, written_form: 'bananas') }
     let!(:ban) { create(:word, written_form: 'bananas') }
 
-    let(:anagram_cracker) { PatternMatcher.new(pattern) }
+    let(:pattern_matcher) { PatternMatcher.new(pattern) }
 
     it 'returns possible solutions' do
-      expect(anagram_cracker.words).to eq [banana.written_form]
+      expect(pattern_matcher.matches).to eq [banana.written_form]
     end
   end
 end

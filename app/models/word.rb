@@ -6,18 +6,14 @@ class Word < ApplicationRecord
   private
 
   def set_product
-    self.product = primes.inject(:*)
+    self.product = product_calculator.product.to_s
   end
 
-  def primes
-    letters.map { |letter| prime_map[letter] }
+  def product_calculator
+    ProductCalculator.new(characters)
   end
 
-  def letters
-    written_form.split('').select { |char| char.match(/[a-z]/) }
-  end
-
-  def prime_map
-    ('a'..'z').to_a.zip(Prime.take(26)).to_h
+  def characters
+    written_form.split('')
   end
 end

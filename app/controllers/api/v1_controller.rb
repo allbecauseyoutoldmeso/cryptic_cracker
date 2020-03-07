@@ -11,11 +11,11 @@ module Api
     end
 
     def anagrams
-      render json: AnagramCracker.new(letters).words
+      render json: AnagramCracker.new(characters).anagrams
     end
 
     def matches
-      render json: PatternMatcher.new(pattern).words
+      render json: PatternMatcher.new(pattern).matches
     end
 
     private
@@ -42,8 +42,8 @@ module Api
       word_params[:word]
     end
 
-    def letters
-      letter_params[:letters].split('')
+    def characters
+      character_params[:characters].split('')
     end
 
     def pattern
@@ -54,8 +54,8 @@ module Api
       params.permit(:word)
     end
 
-    def letter_params
-      params.permit(:letters)
+    def character_params
+      params.permit(:characters)
     end
 
     def pattern_params
