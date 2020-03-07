@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ApiController, type: :request do
+RSpec.describe Api::V1Controller, type: :request do
 
   let(:password) { 'password' }
   let(:username) { 'username' }
@@ -30,7 +30,7 @@ RSpec.describe ApiController, type: :request do
       stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/entries/en-gb/#{word}?fields=definitions").
         to_return(body: response_body.to_json, status: 200)
 
-      get '/api/definitions', params: params, headers: headers
+      get '/api/v1/definitions', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(definition_one, definition_two)
     end
 
@@ -43,7 +43,7 @@ RSpec.describe ApiController, type: :request do
       end
 
       it 'returns 401' do
-        get '/api/definitions', params: params, headers: headers
+        get '/api/v1/definitions', params: params, headers: headers
         expect(response.status).to eq 401
       end
     end
@@ -66,7 +66,7 @@ RSpec.describe ApiController, type: :request do
       stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/#{word}").
         to_return(body: response_body.to_json, status: 200)
 
-      get '/api/synonyms', params: params, headers: headers
+      get '/api/v1/synonyms', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(synonym_one, synonym_two)
     end
   end
@@ -81,7 +81,7 @@ RSpec.describe ApiController, type: :request do
     end
 
     it 'returns anagrams' do
-      get '/api/anagrams/', params: params, headers: headers
+      get '/api/v1/anagrams/', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(anagram_one.written_form, anagram_two.written_form)
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe ApiController, type: :request do
     end
 
     it 'returns matches' do
-      get '/api/matches', params: params, headers: headers
+      get '/api/v1/matches', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(match_one.written_form, match_two.written_form)
     end
   end
