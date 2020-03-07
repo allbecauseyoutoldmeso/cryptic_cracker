@@ -1,6 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe ApiController do
+RSpec.describe ApiController, type: :request do
+
+  let(:password) { 'password' }
+  let(:username) { 'username' }
+  let!(:user) { create(:user, name: username, password: password) }
+
+  let(:headers) do
+    {
+      username: username,
+      password: password
+    }
+  end
 
   describe 'definitions' do
     let(:word) { 'unicorn' }
@@ -19,8 +30,22 @@ RSpec.describe ApiController do
       stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/entries/en-gb/#{word}?fields=definitions").
         to_return(body: response_body.to_json, status: 200)
 
-      get :definitions, params: params
+      get '/api/definitions', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(definition_one, definition_two)
+    end
+
+    describe 'unauthorised request' do
+      let(:headers) do
+        {
+          username: username,
+          password: 'wrong_password'
+        }
+      end
+
+      it 'returns 401' do
+        get '/api/definitions', params: params, headers: headers
+        expect(response.status).to eq 401
+      end
     end
   end
 
@@ -41,13 +66,13 @@ RSpec.describe ApiController do
       stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/#{word}").
         to_return(body: response_body.to_json, status: 200)
 
-      get :synonyms, params: params
+      get '/api/synonyms', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(synonym_one, synonym_two)
     end
   end
 
   describe 'anagrams' do
-    let(:letters) { 't,i,n,s,e,l'}
+    let(:letters) { 'tinsel'}
     let!(:anagram_one) { create(:word, written_form: 'silent') }
     let!(:anagram_two) { create(:word, written_form: 'listen') }
 
@@ -56,7 +81,7 @@ RSpec.describe ApiController do
     end
 
     it 'returns anagrams' do
-      get :anagrams, params: params
+      get '/api/anagrams/', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(anagram_one.written_form, anagram_two.written_form)
     end
   end
@@ -71,7 +96,7 @@ RSpec.describe ApiController do
     end
 
     it 'returns matches' do
-      get :matches, params: params
+      get '/api/matches', params: params, headers: headers
       expect(JSON.parse(response.body)).to contain_exactly(match_one.written_form, match_two.written_form)
     end
   end

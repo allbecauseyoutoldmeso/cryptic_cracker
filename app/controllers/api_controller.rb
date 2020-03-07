@@ -1,4 +1,5 @@
 class ApiController < ApplicationController
+  before_action :authorize_request
 
   def definitions
     render json: DictionaryClient.new(word).definitions
@@ -18,12 +19,30 @@ class ApiController < ApplicationController
 
   private
 
+  def authorize_request
+    unless authorized_user.present?
+      render json: { error: 'unauthorized' }, status: 401
+    end
+  end
+
+  def authorized_user
+    User.find_by(name: username).try(:authenticate, password)
+  end
+
+  def username
+    request.headers['username']
+  end
+
+  def password
+    request.headers['password']
+  end
+
   def word
     word_params[:word]
   end
 
   def letters
-    letter_params[:letters].split(',')
+    letter_params[:letters].split('')
   end
 
   def pattern
