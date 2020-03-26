@@ -39,15 +39,15 @@ module Api
     end
 
     def word
-      word_params[:word]
+      word_params[:word].downcase
     end
 
     def characters
-      character_params[:characters].split('')
+      character_params[:characters].downcase.split('')
     end
 
     def pattern
-      pattern_params[:pattern]
+      pattern_params[:pattern].downcase
     end
 
     def word_params
