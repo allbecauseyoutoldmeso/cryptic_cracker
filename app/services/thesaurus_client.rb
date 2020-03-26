@@ -8,11 +8,15 @@ class ThesaurusClient
   end
 
   def synonyms
-    parsed_response['results'][0]['lexicalEntries'][0]['entries'][0]['senses'].map do |sense|
-      sense['synonyms'].map do |synonym|
-        synonym['text']
-      end
-    end.flatten
+    if parsed_response['error'].present?
+      []
+    else
+      parsed_response['results'][0]['lexicalEntries'][0]['entries'][0]['senses'].map do |sense|
+        sense['synonyms'].map do |synonym|
+          synonym['text']
+        end
+      end.flatten
+    end
   end
 
   private
@@ -22,7 +26,11 @@ class ThesaurusClient
   end
 
   def response
-    RestClient.get(url, headers)
+    begin
+      RestClient.get(url, headers)
+    rescue RestClient::NotFound => error
+      error.response
+    end
   end
 
   def url
