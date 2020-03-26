@@ -10,7 +10,7 @@ module CrypticCracker
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'localhost:3001'
+        origins ENV['FRONT_END_DOMAIN']
         resource '*', headers: :any, methods: [:get]
       end
     end

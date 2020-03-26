@@ -1,5 +1,4 @@
 require 'csv'
-require 'prime'
 
 def logger
   @logger ||= Logger.new('log/seeds.log')
