@@ -39,3 +39,4 @@ yarn-debug.log*
 /config/application.yml
 
 words.csv
+anagram_indicators.csv
