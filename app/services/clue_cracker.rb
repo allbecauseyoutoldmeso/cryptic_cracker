@@ -9,17 +9,17 @@ class ClueCracker
   end
 
   def solutions
-    anagrams.select { |anagram| synonyms.include?(anagram) }.uniq if is_anagram
+    could_be_anagram? ? anagrams.select { |anagram| synonyms.include?(anagram) }.uniq : []
   end
 
   private
 
-  def is_anagram
+  def could_be_anagram?
     anagram_indicators.any?
   end
 
   def synonyms
-    @synonyms ||= non_anagram_indicators.map do |word|
+    @synonyms ||= words.map do |word|
       ThesaurusClient.new(word).synonyms
     end.flatten
   end
@@ -31,11 +31,11 @@ class ClueCracker
   end
 
   def anagram_candidates
-    non_anagram_indicators.select { |word| word.length == length }
-  end
-
-  def non_anagram_indicators
-    @non_anagram_indicators ||= words - anagram_indicators
+    (1..words.length - 1).to_a.map do |num|
+      words.combination(num).to_a.map(&:join).select do |string|
+        string.length == length
+      end
+    end.flatten
   end
 
   def anagram_indicators
