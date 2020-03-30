@@ -15,13 +15,7 @@ class ClueCracker
   private
 
   def could_be_anagram?
-    anagram_indicators.any?
-  end
-
-  def synonyms
-    @synonyms ||= words.map do |word|
-      ThesaurusClient.new(word).synonyms
-    end.flatten
+    entries.any?(&:anagram_indicator)
   end
 
   def anagrams
@@ -30,16 +24,26 @@ class ClueCracker
     end.flatten
   end
 
+  def synonyms
+    @synonyms ||= words.map do |word|
+      ThesaurusClient.new(word).synonyms
+    end.flatten
+  end
+
   def anagram_candidates
-    (1..words.length - 1).to_a.map do |num|
+    (1..words.length).to_a.map do |num|
       words.combination(num).to_a.map(&:join).select do |string|
         string.length == length
       end
     end.flatten
   end
 
-  def anagram_indicators
-    @anagram_indicators ||= words.select { |word| Word.find_by(written_form: word).try(:anagram_indicator) }
+  def words_with_abbreviatons
+    entries.where.not(abbreviations: nil)
+  end
+
+  def entries
+    @entries ||= words.map { |word|  Entry.find_by(word: word) }.compact
   end
 
   def words

@@ -6,7 +6,7 @@ class AnagramCracker
   end
 
   def anagrams
-    Word.where(product: product).map(&:written_form)
+    Entry.where(product: product).map(&:word)
   end
 
   private

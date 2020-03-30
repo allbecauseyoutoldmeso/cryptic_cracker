@@ -10,9 +10,10 @@ RSpec.describe ClueCracker do
         let(:clue) { 'Listen, unusually quiet.' }
         let(:length) { 6 }
 
-        let!(:silent) { create(:word, written_form: 'silent') }
-        let!(:tinsel) { create(:word, written_form: 'tinsel') }
-        let!(:unusually) { create(:word, written_form: 'unusually', anagram_indicator: true)}
+        let!(:silent) { create(:entry, word: 'silent') }
+        let!(:quiet) { create(:entry, word: 'quiet') }
+        let!(:quiet) { create(:entry, word: 'listen') }
+        let!(:unusually) { create(:entry, word: 'unusually', anagram_indicator: true)}
 
         let(:response_one) do
           { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'attend' }] }] }] }] }] }
@@ -46,8 +47,10 @@ RSpec.describe ClueCracker do
         let(:clue) { 'Drunken men are stingier.' }
         let(:length) { 6 }
 
-        let!(:meaner) { create(:word, written_form: 'meaner') }
-        let!(:drunken) { create(:word, written_form: 'drunken', anagram_indicator: true)}
+        let!(:meaner) { create(:entry, word: 'meaner') }
+        let!(:men) { create(:entry, word: 'men') }
+        let!(:are) { create(:entry, word: 'are') }
+        let!(:drunken) { create(:entry, word: 'drunken', anagram_indicator: true)}
 
         let(:response_one) do
           { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'meaner' }] }] }] }] }] }

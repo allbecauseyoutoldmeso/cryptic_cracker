@@ -7,7 +7,7 @@ class PatternMatcher
   end
 
   def matches
-    Word.where('written_form REGEXP ?', regex).map(&:written_form)
+    Entry.where('word REGEXP ?', regex).map(&:word)
   end
 
   private

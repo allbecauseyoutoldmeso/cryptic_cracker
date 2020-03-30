@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_28_103745) do
+ActiveRecord::Schema.define(version: 2020_03_29_180435) do
+  create_table "entries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "word"
+    t.string "product"
+    t.boolean "anagram_indicator", default: false
+    t.string "abbreviations"
+    t.index ["product"], name: "index_entries_on_product"
+  end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "password_digest"
-  end
-
-  create_table "words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "written_form"
-    t.string "product"
-    t.boolean "anagram_indicator", default: false
-    t.index ["product"], name: "index_words_on_product"
   end
 
 end

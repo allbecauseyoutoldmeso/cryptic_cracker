@@ -1,6 +1,6 @@
 require 'prime'
 
-class Word < ApplicationRecord
+class Entry < ApplicationRecord
   before_save :set_product
 
   private
@@ -14,6 +14,6 @@ class Word < ApplicationRecord
   end
 
   def characters
-    written_form.split('')
+    word.split('')
   end
 end

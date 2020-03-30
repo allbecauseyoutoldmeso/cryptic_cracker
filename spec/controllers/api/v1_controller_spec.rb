@@ -73,8 +73,8 @@ RSpec.describe Api::V1Controller, type: :request do
 
   describe 'anagrams' do
     let(:characters) { 'tinsel'}
-    let!(:anagram_one) { create(:word, written_form: 'silent') }
-    let!(:anagram_two) { create(:word, written_form: 'listen') }
+    let!(:anagram_one) { create(:entry, word: 'silent') }
+    let!(:anagram_two) { create(:entry, word: 'listen') }
 
     let(:params) do
       { characters: characters}
@@ -82,14 +82,14 @@ RSpec.describe Api::V1Controller, type: :request do
 
     it 'returns anagrams' do
       get '/api/v1/anagrams/', params: params, headers: headers
-      expect(JSON.parse(response.body)).to contain_exactly(anagram_one.written_form, anagram_two.written_form)
+      expect(JSON.parse(response.body)).to contain_exactly(anagram_one.word, anagram_two.word)
     end
   end
 
   describe 'matches' do
     let(:pattern) { 'f_o_e_'}
-    let!(:match_one) { create(:word, written_form: 'flower') }
-    let!(:match_two) { create(:word, written_form: 'fooled') }
+    let!(:match_one) { create(:entry, word: 'flower') }
+    let!(:match_two) { create(:entry, word: 'fooled') }
 
     let(:params) do
       { pattern: pattern }
@@ -97,7 +97,7 @@ RSpec.describe Api::V1Controller, type: :request do
 
     it 'returns matches' do
       get '/api/v1/matches', params: params, headers: headers
-      expect(JSON.parse(response.body)).to contain_exactly(match_one.written_form, match_two.written_form)
+      expect(JSON.parse(response.body)).to contain_exactly(match_one.word, match_two.word)
     end
   end
 end
