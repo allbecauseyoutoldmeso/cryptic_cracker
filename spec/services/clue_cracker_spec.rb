@@ -15,27 +15,15 @@ RSpec.describe ClueCracker do
         let!(:quiet) { create(:entry, word: 'listen') }
         let!(:unusually) { create(:entry, word: 'unusually', anagram_indicator: true)}
 
-        let(:response_one) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'attend' }] }] }] }] }] }
-        end
-
-        let(:response_two) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'noiseless' }] }] }] }] }] }
-        end
-
-        let(:response_three) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'peculiarly' }] }] }] }] }] }
-        end
-
         before do
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/listen").
-            to_return(body: response_one.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'attend' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/quiet").
-            to_return(body: response_two.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'noiseless' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/unusually").
-            to_return(body: response_three.to_json, status: 200)
+            to_return(body:   { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'peculiarly' }] }] }] }] }] }.to_json, status: 200)
         end
 
         it 'returns solution' do
@@ -52,34 +40,18 @@ RSpec.describe ClueCracker do
         let!(:are) { create(:entry, word: 'are') }
         let!(:drunken) { create(:entry, word: 'drunken', anagram_indicator: true)}
 
-        let(:response_one) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'meaner' }] }] }] }] }] }
-        end
-
-        let(:response_two) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'guys' }] }] }] }] }] }
-        end
-
-        let(:response_three) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'live' }] }] }] }] }] }
-        end
-
-        let(:response_four) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'inebriated' }] }] }] }] }] }
-        end
-
         before do
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/stingier").
-            to_return(body: response_one.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'meaner' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/men").
-            to_return(body: response_two.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'guys' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/are").
-            to_return(body: response_three.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'live' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/drunken").
-            to_return(body: response_four.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'silent' }, { 'text' => 'inebriated' }] }] }] }] }] }.to_json, status: 200)
         end
 
         it 'returns solution' do
@@ -98,45 +70,56 @@ RSpec.describe ClueCracker do
         let!(:steal) { create(:entry, word: 'steal') }
         let!(:pilfer) { create(:entry, word: 'pilfer') }
 
-        let(:response_one) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'noiseless' }] }] }] }] }] }
-        end
-
-        let(:response_two) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'bird' }] }] }] }] }] }
-        end
-
-        let(:response_three) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'arranged' }] }] }] }] }] }
-        end
-
-        let(:response_four) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'pilfer' }] }] }] }] }] }
-        end
-
-        let(:response_five) do
-          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [] }] }] }] }] }
-        end
-
         before do
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/quiet").
-            to_return(body: response_one.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'noiseless' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/flier").
-            to_return(body: response_two.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'bird' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/managed").
-            to_return(body: response_three.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'arranged' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/steal").
-            to_return(body: response_four.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'pilfer' }] }] }] }] }] }.to_json, status: 200)
 
           stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/to").
-            to_return(body: response_five.to_json, status: 200)
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [] }] }] }] }] }.to_json, status: 200)
         end
 
         it 'returns solution' do
           expect(clue_cracker.solutions).to eq ['pilfer']
+        end
+      end
+    end
+
+    context 'combiwords' do
+      context 'solution is a synonym of one word, made up of synonyms of other words' do
+        let(:clue) { 'Provide support for larva.' }
+        let(:length) { 11 }
+
+        let!(:provide) { create(:entry, word: 'provide') }
+        let!(:support) { create(:entry, word: 'support') }
+        let!(:for) { create(:entry, word: 'for') }
+        let!(:larva) { create(:entry, word: 'larva') }
+        let!(:caterpillar) { create(:entry, word: 'caterpillar') }
+
+        before do
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/provide").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'cater' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/support").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'pillar' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/for").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/larva").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'caterpillar' }] }] }] }] }] }.to_json, status: 200)
+        end
+
+        it 'returns solution' do
+          expect(clue_cracker.solutions).to eq ['caterpillar']
         end
       end
     end

@@ -1,4 +1,4 @@
-class AbbreviationSwitcher
+class Switcher
   attr_reader :words
 
   def initialize(words)
@@ -24,9 +24,11 @@ class AbbreviationSwitcher
 
   def switches
     @switches ||= words.map do |word|
+      synonyms = ThesaurusClient.new(word).synonyms
       abbreviations = Entry.find_by(word: word).try(:abbreviations).try(:split, ',') || []
-      abbreviations.map do |abbreviation|
-        [word, abbreviation]
+
+      [synonyms + abbreviations].map do |alternative|
+        [word, alternative]
       end
     end.flatten(1)
   end
