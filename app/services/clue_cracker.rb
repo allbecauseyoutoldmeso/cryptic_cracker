@@ -14,6 +14,10 @@ class ClueCracker
   private
 
   def combiword_solutions
+    combiwords.select { |combiword| synonyms.include?(combiword) }.uniq
+  end
+
+  def combiwords
     (words_with_switches + [words]).map do |words|
       CombiwordFinder.new(words, length).combiwords
     end.flatten.uniq
