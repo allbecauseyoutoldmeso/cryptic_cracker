@@ -86,6 +86,59 @@ RSpec.describe ClueCracker do
           expect(clue_cracker.solutions).to eq ['meaner']
         end
       end
+
+      context 'solution is a synonym of one word and an anagram of words and abbreviatons' do
+        let(:clue) { 'Quiet flier managed to steal.' }
+        let(:length) { 6 }
+
+        let!(:quiet) { create(:entry, word: 'quiet', abbreviations: 'p') }
+        let!(:flier) { create(:entry, word: 'flier') }
+        let!(:managed) { create(:entry, word: 'managed', anagram_indicator: true) }
+        let!(:to) { create(:entry, word: 'to')}
+        let!(:steal) { create(:entry, word: 'steal') }
+        let!(:pilfer) { create(:entry, word: 'pilfer') }
+
+        let(:response_one) do
+          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'noiseless' }] }] }] }] }] }
+        end
+
+        let(:response_two) do
+          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'bird' }] }] }] }] }] }
+        end
+
+        let(:response_three) do
+          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'arranged' }] }] }] }] }] }
+        end
+
+        let(:response_four) do
+          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'pilfer' }] }] }] }] }] }
+        end
+
+        let(:response_five) do
+          { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [] }] }] }] }] }
+        end
+
+        before do
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/quiet").
+            to_return(body: response_one.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/flier").
+            to_return(body: response_two.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/managed").
+            to_return(body: response_three.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/steal").
+            to_return(body: response_four.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/to").
+            to_return(body: response_five.to_json, status: 200)
+        end
+
+        it 'returns solution' do
+          expect(clue_cracker.solutions).to eq ['pilfer']
+        end
+      end
     end
   end
 end

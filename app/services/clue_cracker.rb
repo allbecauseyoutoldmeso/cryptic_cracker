@@ -1,5 +1,4 @@
 class ClueCracker
-
   attr_reader :clue
   attr_reader :length
 
@@ -15,12 +14,12 @@ class ClueCracker
   private
 
   def could_be_anagram?
-    entries.any?(&:anagram_indicator)
+    Entry.where(word: words).any?(&:anagram_indicator)
   end
 
   def anagrams
-    @anagrams ||= anagram_candidates.map do |candidate|
-      AnagramCracker.new(candidate.split('')).anagrams
+    (words_with_abbreviations + [words]).map do |words|
+      AnagramFinder.new(words, length).anagrams
     end.flatten
   end
 
@@ -30,20 +29,8 @@ class ClueCracker
     end.flatten
   end
 
-  def anagram_candidates
-    (1..words.length).to_a.map do |num|
-      words.combination(num).to_a.map(&:join).select do |string|
-        string.length == length
-      end
-    end.flatten
-  end
-
-  def words_with_abbreviatons
-    entries.where.not(abbreviations: nil)
-  end
-
-  def entries
-    @entries ||= words.map { |word|  Entry.find_by(word: word) }.compact
+  def words_with_abbreviations
+    AbbreviationSwitcher.new(words).words_with_switches
   end
 
   def words

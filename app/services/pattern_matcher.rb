@@ -1,5 +1,4 @@
 class PatternMatcher
-
   attr_reader :pattern
 
   def initialize(pattern)
