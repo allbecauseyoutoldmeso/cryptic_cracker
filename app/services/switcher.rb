@@ -7,8 +7,8 @@ class Switcher
 
   def words_with_switches
     combinations_of_switches.map do |switches|
-      words.map do |word|
-        switch = switches.find { |switch| word == switch[0] }
+      words.each_with_index.map do |word, index|
+        switch = switches.find { |switch| index == switch[0] }
         switch.present? ? switch[1] : word
       end
     end.uniq
@@ -23,12 +23,12 @@ class Switcher
   end
 
   def switches
-    @switches ||= words.map do |word|
+    @switches ||= words.each_with_index.map do |word, index|
       synonyms = ThesaurusClient.new(word).synonyms
-      abbreviations = Entry.find_by(word: word).try(:abbreviations).try(:split, ',') || []
+      abbreviations = Entry.where(word: word)[0].try(:abbreviations).try(:split, ',') || []
 
       [synonyms + abbreviations].map do |alternative|
-        [word, alternative]
+        [index, alternative]
       end
     end.flatten(1)
   end
