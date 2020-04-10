@@ -26,8 +26,7 @@ class Switcher
     @switches ||= words.each_with_index.map do |word, index|
       synonyms = ThesaurusClient.new(word).synonyms
       abbreviations = Entry.where(word: word)[0].try(:abbreviations).try(:split, ',') || []
-
-      [synonyms + abbreviations].map do |alternative|
+      (synonyms + abbreviations).map do |alternative|
         [index, alternative]
       end
     end.flatten(1)
