@@ -91,9 +91,7 @@ RSpec.describe ClueCracker do
           expect(clue_cracker.solutions).to eq ['pilfer']
         end
       end
-    end
 
-    context 'combiwords' do
       context 'solution is a synonym of one word, made up of synonyms of other words' do
         let(:clue) { 'Provide support for larva.' }
         let(:length) { 11 }
@@ -120,6 +118,35 @@ RSpec.describe ClueCracker do
 
         it 'returns solution' do
           expect(clue_cracker.solutions).to eq ['caterpillar']
+        end
+      end
+
+      context 'solution is a synonym of one word within a synonym of another word, giving a synonym of a third word' do
+        let(:clue) { 'Beauty in crimson rose.' }
+        let(:length) { 8 }
+
+        let!(:beauty) { create(:entry, word: 'pretty') }
+        let!(:in) { create(:entry, word: 'in') }
+        let!(:crimson) { create(:entry, word: 'crimson') }
+        let!(:rose) { create(:entry, word: 'rose') }
+        let!(:rebelled) { create(:entry, word: 'rebelled') }
+
+        before do
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/beauty").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'belle' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/in").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/crimson").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'red' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/rose").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'rebelled' }] }] }] }] }] }.to_json, status: 200)
+        end
+
+        it 'returns solution' do
+          expect(clue_cracker.solutions).to eq ['rebelled']
         end
       end
     end

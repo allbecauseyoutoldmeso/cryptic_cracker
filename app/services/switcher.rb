@@ -7,9 +7,9 @@ class Switcher
 
   def words_with_switches
     combinations_of_switches.map do |switches|
-      words.each_with_index.map do |word, index|
-        switch = switches.find { |switch| index == switch[0] }
-        switch.present? ? switch[1] : word
+      words.map do |word|
+        switch = switches.find { |switch| word.index == switch.index }
+        switch.present? ? switch : word
       end
     end.uniq
   end
@@ -23,11 +23,11 @@ class Switcher
   end
 
   def switches
-    @switches ||= words.each_with_index.map do |word, index|
-      synonyms = ThesaurusClient.new(word).synonyms
-      abbreviations = Entry.where(word: word)[0].try(:abbreviations).try(:split, ',') || []
+    @switches ||= words.map do |word|
+      synonyms = ThesaurusClient.new(word.self).synonyms
+      abbreviations = Entry.where(word: word.self)[0].try(:abbreviations).try(:split, ',') || []
       (synonyms + abbreviations).map do |alternative|
-        [index, alternative]
+        Word.new(alternative, word.index)
       end
     end.flatten(1)
   end

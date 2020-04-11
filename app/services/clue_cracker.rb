@@ -1,3 +1,5 @@
+Word = Struct.new(:self, :index)
+
 class ClueCracker
   attr_reader :clue
   attr_reader :length
@@ -8,38 +10,30 @@ class ClueCracker
   end
 
   def solutions
-    (anagram_solutions + combiword_solutions).uniq - words
+    anagram_solutions.map(&:self).uniq
   end
 
   private
 
-  def combiword_solutions
-    combiwords.select { |combiword| synonyms.include?(combiword) }.uniq
-  end
-
-  def combiwords
-    (words_with_switches + [words]).map do |words|
-      CombiwordFinder.new(words, length).combiwords
-    end.flatten.uniq
-  end
-
   def anagram_solutions
-    could_be_anagram? ? anagrams.select { |anagram| synonyms.include?(anagram) }.uniq : []
-  end
-
-  def could_be_anagram?
-    Entry.where(word: words).any?(&:anagram_indicator)
+    anagrams.select do |anagram|
+      synonyms.any? do |synonym|
+        synonym.self == anagram.self && !anagram.indices.include?(synonym.index)
+      end
+    end.uniq
   end
 
   def anagrams
     (words_with_switches + [words]).map do |words|
       AnagramFinder.new(words, length).anagrams
-    end.flatten
+    end.flatten.uniq
   end
 
   def synonyms
     @synonyms ||= words.map do |word|
-      ThesaurusClient.new(word).synonyms
+      ThesaurusClient.new(word.self).synonyms.map do |synonym|
+        Word.new(synonym, word.index)
+      end
     end.flatten
   end
 
@@ -48,6 +42,8 @@ class ClueCracker
   end
 
   def words
-    @words ||= clue.split(' ').map(&:downcase).map { |word| word.gsub(/[^a-z]/, '') }
+    @words ||= clue.split(' ')
+      .map { |word| word.downcase.gsub(/[^a-z]/, '') }
+      .each_with_index.map { |word, index| Word.new(word, index) }
   end
 end
