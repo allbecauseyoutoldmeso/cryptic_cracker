@@ -1,4 +1,4 @@
-Anagram = Struct.new(:self, :indices)
+Anagram = Struct.new(:body, :indices)
 
 class AnagramFinder
   attr_reader :words
@@ -11,7 +11,7 @@ class AnagramFinder
 
   def anagrams
     anagram_candidates.map do |candidate|
-      letters = candidate.map(&:self).join.split('')
+      letters = candidate.map(&:body).join.split('')
       AnagramCracker.new(letters).anagrams.map do |anagram|
         Anagram.new(anagram, candidate.map(&:index))
       end
@@ -23,7 +23,7 @@ class AnagramFinder
   def anagram_candidates
     (1..words.length).to_a.map do |num|
       words.combination(num).to_a.select do |combination|
-        combination.map(&:self).join.length == length
+        combination.map(&:body).join.length == length
       end
     end.flatten(1)
   end

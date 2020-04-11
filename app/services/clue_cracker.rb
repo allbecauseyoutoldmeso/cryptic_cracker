@@ -1,5 +1,3 @@
-Word = Struct.new(:self, :index)
-
 class ClueCracker
   attr_reader :clue
   attr_reader :length
@@ -10,15 +8,17 @@ class ClueCracker
   end
 
   def solutions
-    anagram_solutions.map(&:self).uniq
+    anagram_solutions.map(&:body).uniq
   end
 
   private
 
   def anagram_solutions
     anagrams.select do |anagram|
-      synonyms.any? do |synonym|
-        synonym.self == anagram.self && !anagram.indices.include?(synonym.index)
+      words.any? do |word|
+        word.synonyms.any? do |synonym|
+          synonym == anagram.body && !anagram.indices.include?(word.index)
+        end
       end
     end.uniq
   end
@@ -27,14 +27,6 @@ class ClueCracker
     (words_with_switches + [words]).map do |words|
       AnagramFinder.new(words, length).anagrams
     end.flatten.uniq
-  end
-
-  def synonyms
-    @synonyms ||= words.map do |word|
-      ThesaurusClient.new(word.self).synonyms.map do |synonym|
-        Word.new(synonym, word.index)
-      end
-    end.flatten
   end
 
   def words_with_switches

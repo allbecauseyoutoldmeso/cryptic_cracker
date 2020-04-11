@@ -1,3 +1,5 @@
+Switch = Struct.new(:body, :index)
+
 class Switcher
   attr_reader :words
 
@@ -24,10 +26,8 @@ class Switcher
 
   def switches
     @switches ||= words.map do |word|
-      synonyms = ThesaurusClient.new(word.self).synonyms
-      abbreviations = Entry.where(word: word.self)[0].try(:abbreviations).try(:split, ',') || []
-      (synonyms + abbreviations).map do |alternative|
-        Word.new(alternative, word.index)
+      (word.synonyms + word.abbreviations).map do |alternative|
+        Switch.new(alternative, word.index)
       end
     end.flatten(1)
   end
