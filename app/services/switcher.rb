@@ -26,7 +26,7 @@ class Switcher
 
   def switches
     @switches ||= words.map do |word|
-      (word.synonyms + word.abbreviations).map do |alternative|
+      word.alternatives.map do |alternative|
         Switch.new(alternative, word.index)
       end
     end.flatten(1)

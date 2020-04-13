@@ -7,12 +7,20 @@ class Word
     @index = index
   end
 
+  def alternatives
+    synonyms + abbreviations + [initial_letter]
+  end
+
   def synonyms
     @synonyms ||= ThesaurusClient.new(body).synonyms
   end
 
   def abbreviations
-    entry.try(:abbreviations).try(:split, ',') || []
+    entry.try(:parsed_abbreviations) || []
+  end
+
+  def initial_letter
+    body[0]
   end
 
   private

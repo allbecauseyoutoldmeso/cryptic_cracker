@@ -3,6 +3,10 @@ require 'prime'
 class Entry < ApplicationRecord
   before_save :set_product
 
+  def parsed_abbreviations
+    abbreviations.try(:split, '') || []
+  end
+
   private
 
   def set_product

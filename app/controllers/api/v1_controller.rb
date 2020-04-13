@@ -39,11 +39,11 @@ module Api
     end
 
     def word
-      word_params[:word].downcase
+      word_params[:word].downcase.gsub(/[^a-z|^-]/, '')
     end
 
     def characters
-      character_params[:characters].downcase.split('')
+      character_params[:characters].downcase.gsub(/[^a-z|^-]/, '').split('')
     end
 
     def pattern

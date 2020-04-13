@@ -149,6 +149,39 @@ RSpec.describe ClueCracker do
           expect(clue_cracker.solutions).to eq ['rebelled']
         end
       end
+
+      context 'solution is a synonym of one word composed of initial letters of other words' do
+        let(:clue) { 'Initially had a tall topper.' }
+        let(:length) { 3 }
+
+        let!(:initially) { create(:entry, word: 'initially') }
+        let!(:had) { create(:entry, word: 'had') }
+        let!(:a) { create(:entry, word: 'a ') }
+        let!(:tall) { create(:entry, word: 'tall') }
+        let!(:topper) { create(:entry, word: 'topper') }
+        let!(:hat) { create(:entry, word: 'hat') }
+
+        before do
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/initially").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'first' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/had").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'owned' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/a").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/tall").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'high' }] }] }] }] }] }.to_json, status: 200)
+
+          stub_request(:get, "https://od-api.oxforddictionaries.com/api/v2/thesaurus/en-gb/topper").
+            to_return(body: { 'results' => [{ 'lexicalEntries' => [{ 'entries' => [{ 'senses' => [{ 'synonyms' => [{ 'text' => 'hat' }] }] }] }] }] }.to_json, status: 200)
+          end
+
+        it 'returns solution' do
+          expect(clue_cracker.solutions).to eq ['hat']
+        end
+      end
     end
   end
 end
