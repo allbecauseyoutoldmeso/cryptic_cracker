@@ -1,3 +1,5 @@
+Alternative = Struct.new(:body, :index)
+
 class Word
   attr_reader :body
   attr_reader :index
@@ -8,7 +10,9 @@ class Word
   end
 
   def alternatives
-    synonyms + abbreviations + [initial_letter]
+    @alternatives ||= ([body, initial_letter] + synonyms + abbreviations).map do |alternative_body|
+      Alternative.new(alternative_body, index)
+    end
   end
 
   def synonyms
@@ -26,6 +30,6 @@ class Word
   private
 
   def entry
-    Entry.where(word: body)[0]
+    Entry.where(word: body).first
   end
 end

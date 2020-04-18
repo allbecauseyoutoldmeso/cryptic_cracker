@@ -8,27 +8,35 @@ class Switcher
   end
 
   def words_with_switches
-    combinations_of_switches.map do |switches|
-      words.map do |word|
-        switch = switches.find { |switch| word.index == switch.index }
-        switch.present? ? switch : word
+    alternative_indices.map do |indices|
+      indices.each_with_index.map do |alternative_index, word_index|
+        words[word_index].alternatives[alternative_index]
       end
-    end.uniq
+    end
   end
 
   private
 
-  def combinations_of_switches
-    (1..switches.length).to_a.map do |num|
-      switches.combination(num).to_a
-    end.flatten(1)
+  def alternative_indices
+    all_arrays = [primary_array]
+
+    for num in (0..word_count - 1)
+      new_arrays = all_arrays.map { |array| generate_arrays(words[num], array) }.flatten(1)
+      all_arrays += new_arrays
+    end
+
+    all_arrays.uniq
   end
 
-  def switches
-    @switches ||= words.map do |word|
-      word.alternatives.map do |alternative|
-        Switch.new(alternative, word.index)
-      end
-    end.flatten(1)
+  def word_count
+    @word_count ||= words.count
+  end
+
+  def generate_arrays(word, array)
+    (0..word.alternatives.count - 1).map { |num| array.each_with_index.map { |x, index| index == word.index ? num : x } }
+  end
+
+  def primary_array
+    [0] * word_count
   end
 end
