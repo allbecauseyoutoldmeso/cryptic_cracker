@@ -156,7 +156,7 @@ RSpec.describe ClueCracker do
 
         let!(:initially) { create(:entry, word: 'initially') }
         let!(:had) { create(:entry, word: 'had') }
-        let!(:a) { create(:entry, word: 'a ') }
+        let!(:a) { create(:entry, word: 'a') }
         let!(:tall) { create(:entry, word: 'tall') }
         let!(:topper) { create(:entry, word: 'topper') }
         let!(:hat) { create(:entry, word: 'hat') }

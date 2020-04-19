@@ -19,6 +19,14 @@ class Word
     @synonyms ||= ThesaurusClient.new(body).synonyms
   end
 
+  def anagram_indicator?
+    entry.try(:anagram_indicator) || false
+  end
+
+  def acrostic_indicator?
+    entry.try(:acrostic_indicator) || false
+  end
+
   def abbreviations
     entry.try(:parsed_abbreviations) || []
   end

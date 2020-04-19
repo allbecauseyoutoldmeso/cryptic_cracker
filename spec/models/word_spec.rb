@@ -7,8 +7,8 @@ RSpec.describe Entry do
     expect(word.product).to eq '65966450'
   end
 
-  it 'work with non-alphabetical characters' do
-    word = Entry.create(word: 'cup-cake')
-    expect(word.product).to eq '65966450'
+  it 'is invalid if word contains non-alphabetical characters' do
+    word = Entry.new(word: 'cup-cake')
+    expect(word.valid?).to eq false
   end
 end

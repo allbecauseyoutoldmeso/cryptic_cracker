@@ -2,6 +2,7 @@ require 'prime'
 
 class Entry < ApplicationRecord
   before_save :set_product
+  validates :word, presence: true, format: { with: /\A[a-z]*\z/ }
 
   def parsed_abbreviations
     abbreviations.try(:split, '') || []
