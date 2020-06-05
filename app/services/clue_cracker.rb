@@ -8,7 +8,7 @@ class ClueCracker
   end
 
   def solutions
-    anagram_solutions.map(&:body).uniq
+    anagram_solutions.uniq
   end
 
   private
@@ -17,20 +17,18 @@ class ClueCracker
     anagrams.select do |anagram|
       words.any? do |word|
         word.synonyms.any? do |synonym|
-          synonym == anagram.body && !anagram.indices.include?(word.index)
+          synonym == anagram
         end
       end
     end.uniq
   end
 
   def anagrams
-    (words_with_switches + [words]).map do |words|
-      AnagramFinder.new(words, length).anagrams
-    end.flatten.uniq
+    AnagramFinder.new(words_with_switches, length).anagrams
   end
 
   def words_with_switches
-    Switcher.new(words).words_with_switches
+    Switcher.new(words).words_with_switches + [words]
   end
 
   def words
