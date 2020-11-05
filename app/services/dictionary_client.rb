@@ -11,7 +11,8 @@ class DictionaryClient
     if parsed_response['error'].present?
       []
     else
-      parsed_response['results'][0]['lexicalEntries'][0]['entries'][0]['senses'].map do |sense| sense['definitions'][0]
+      parsed_response['results'][0]['lexicalEntries'][0]['entries'][0]['senses'].map do |sense|
+        sense['definitions'][0]
       end
     end
   end
